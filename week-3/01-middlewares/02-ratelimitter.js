@@ -15,7 +15,21 @@ let numberOfRequestsForUser = {};
 setInterval(() => {
     numberOfRequestsForUser = {};
 }, 1000)
-
+function countUser(req, res, next) {
+  const username = req.headers['user - id'];
+  if (numberOfRequestsForUser.hasOwnProperty(username)) {
+    numberOfRequestsForUser[username]++;
+    if (numberOfRequestsForUser[username]>=5) {
+      return res.status(404).send({ msg: "You are sending too many request" });
+      
+    }
+  }
+  else {
+    numberOfRequestsForUser[username] = 1;
+  }
+  next();
+}
+app.use(countUser);
 app.get('/user', function(req, res) {
   res.status(200).json({ name: 'john' });
 });
@@ -23,5 +37,6 @@ app.get('/user', function(req, res) {
 app.post('/user', function(req, res) {
   res.status(200).json({ msg: 'created dummy user' });
 });
+
 
 module.exports = app;
