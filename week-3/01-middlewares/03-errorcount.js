@@ -25,7 +25,7 @@ app.get('/errorCount', function(req, res) {
 // at the end of our file
 //Through this express will not send the common 500 status code ,but only what we want to send as error code
 function errorfinder(err, req, res, next) {
-  errorCount = errorCount + 1;
+  errorCount++;
   const statusCo = err.statusCode;
   if (statusCo != 200) {
     res.sendStatus(404);
